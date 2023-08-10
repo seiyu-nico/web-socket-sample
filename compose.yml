@@ -1,0 +1,73 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./infra/docker/php/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+        - ENV=${ENV:-local}
+      target: ${ENV:-local}
+    volumes:
+      - type: bind
+        source: ./src-back-end
+        target: /src
+      - type: bind
+        source: ./infra/docker/php/php.ini/php.${ENV-local}.ini
+        target: /usr/local/etc/php/php.ini
+    networks:
+      - default
+      - dev-container
+  web:
+    build:
+      context: .
+      dockerfile: ./infra/docker/nginx/Dockerfile
+    networks:
+      - default
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.websocket.rule=Host(`${WEB_URL}`)"
+      - "traefik.http.routers.websocket.tls=true"
+      - "traefik.http.routers.websocket.tls.certresolver=zerossl"
+      - "traefik.http.services.websocket.loadbalancer.server.port=80"
+    volumes:
+      - type: bind
+        source: ./src-back-end
+        target: /src
+    expose:
+      - 80
+  node:
+    build:
+      context: .
+      dockerfile: ./infra/docker/node/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - type: bind
+        source: ./src-back-end
+        target: /src
+    tty: true
+    depends_on:
+      - app
+    expose:
+      - 6001
+    networks:
+      - default
+      - dev-container
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.echo-server.rule=Host(`${SOCKET_URL}`)"
+      - "traefik.http.routers.echo-server.tls=true"
+      - "traefik.http.routers.echo-server.tls.certresolver=zerossl"
+      - "traefik.http.routers.echo-server.entrypoints=websocket"
+      - "traefik.http.services.echo-server.loadbalancer.server.port=6001"
+networks:
+  dev-container:
+    external: true
+  web:
+    external: true
