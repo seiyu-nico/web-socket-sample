@@ -9,11 +9,11 @@ class CsvDownloadController extends Controller
 {
     public function __invoke()
     {
-        CsvCreating::dispatch();
-        response()->json([
+        \Log::info('csv download api called');
+        CsvCreating::dispatch()->onQueue('jobs');
+
+        return response()->json([
             'message' => 'csv creating started',
         ]);
     }
 }
-
-// \App\Jobs\CsvCreating::dispatch();
