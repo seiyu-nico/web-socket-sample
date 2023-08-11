@@ -18,6 +18,7 @@ services:
     networks:
       - default
       - dev-container
+    command: ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
   web:
     build:
       context: .

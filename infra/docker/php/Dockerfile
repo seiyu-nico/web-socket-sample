@@ -22,6 +22,7 @@ RUN apt-get update \
     libzip-dev \
     libicu-dev \
     libonig-dev \
+    supervisor \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen en_US.UTF-8 \
@@ -37,6 +38,7 @@ RUN apt-get update \
 
 COPY ./infra/docker/php/php.ini/php.${ENV}.ini /usr/local/etc/php/php.ini
 COPY ./infra/docker/php/black-list.txt /usr/local/etc/php/black-list.txt
+COPY ./infra/docker/php/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ARG UID
 ARG GID
@@ -48,7 +50,8 @@ RUN groupadd --force -g ${GID} ${USER} && \
     useradd -ms /bin/bash --no-user-group -u ${UID} -g ${GID} ${USER} && \
     mkdir /composer && \
     chown -R ${USER}:${USER} /src && \
-    chown -R ${USER}:${USER} /composer
+    chown -R ${USER}:${USER} /composer && \
+    chown -R ${USER}:${USER} /var/log
 
 FROM base as prod
 

@@ -1,3 +1,6 @@
 .idea
 .vscode
 .env
+laravel-echo-server.lock
+supervisord.log
+supervisord.pid
