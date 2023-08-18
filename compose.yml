@@ -10,7 +10,7 @@ services:
       target: ${ENV:-local}
     volumes:
       - type: bind
-        source: ./src-back-end
+        source: ./src-backend
         target: /src
       - type: bind
         source: ./infra/docker/php/php.ini/php.${ENV-local}.ini
@@ -35,7 +35,7 @@ services:
       - "traefik.http.services.websocket.loadbalancer.server.port=80"
     volumes:
       - type: bind
-        source: ./src-back-end
+        source: ./src-backend
         target: /src
     expose:
       - 80
@@ -48,7 +48,7 @@ services:
         - GID=${GID:-1000}
     volumes:
       - type: bind
-        source: ./src-back-end
+        source: ./src-backend
         target: /src
     tty: true
     depends_on:

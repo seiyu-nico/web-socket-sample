@@ -5,7 +5,7 @@ build:
 create-project:
 	@make build
 	@make up
-	rm -f src-back-end/.gitignore
+	rm -f src-backend/.gitignore
 	docker compose exec app composer create-project --prefer-dist laravel/laravel .
 	docker compose exec app php artisan key:generate
 	docker compose exec app php artisan storage:link
@@ -110,9 +110,9 @@ phpstan:
 install-packages-laravel-pint:
 	docker compose exec app composer require laravel/pint --dev
 	if type "jq" > /dev/null 2>&1; then \
-		cp ./src-back-end/composer.json ./src-back-end/composer.json.tmp; \
-		jq --indent 4 '.scripts |= .+{"pint": "./vendor/bin/pint -v", "check-pint": "./vendor/bin/pint --test"}' ./src-back-end/composer.json.tmp  > ./src-back-end/composer.json; \
-		rm -f ./src-back-end/composer.json.tmp; \
+		cp ./src-backend/composer.json ./src-backend/composer.json.tmp; \
+		jq --indent 4 '.scripts |= .+{"pint": "./vendor/bin/pint -v", "check-pint": "./vendor/bin/pint --test"}' ./src-backend/composer.json.tmp  > ./src-backend/composer.json; \
+		rm -f ./src-backend/composer.json.tmp; \
 	fi
 install-packages-laravel-ide-helper:
 	docker compose exec app composer require --dev barryvdh/laravel-ide-helper
@@ -120,7 +120,7 @@ install-packages-laravel-ide-helper:
 install-packages-larastan:
 	docker compose exec app composer require --dev nunomaduro/larastan
 	if type "jq" > /dev/null 2>&1; then \
-		cp ./src-back-end/composer.json ./src-back-end/composer.json.tmp; \
-		jq --indent 4 '.scripts |= .+{"phpstan": "./vendor/bin/phpstan analyse --xdebug"}' ./src-back-end/composer.json.tmp  > ./src-back-end/composer.json; \
-		rm -f ./src-back-end/composer.json.tmp; \
+		cp ./src-backend/composer.json ./src-backend/composer.json.tmp; \
+		jq --indent 4 '.scripts |= .+{"phpstan": "./vendor/bin/phpstan analyse --xdebug"}' ./src-backend/composer.json.tmp  > ./src-backend/composer.json; \
+		rm -f ./src-backend/composer.json.tmp; \
 	fi
