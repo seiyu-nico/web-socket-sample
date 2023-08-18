@@ -1,6 +1,6 @@
 {
-    "name": "frontend",
-    "short_name": "frontend",
+    "name": "websocket_sample",
+    "short_name": "websocket_sample",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
