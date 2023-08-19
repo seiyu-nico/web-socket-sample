@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:websocket_sample/entities/csv.dart';
 import 'package:websocket_sample/helper/files/downloader.dart';
+import 'package:external_path/external_path.dart';
 
 class AppDownloader implements Downloader {
   const AppDownloader();
@@ -17,9 +18,11 @@ class AppDownloader implements Downloader {
       buffer.writeln(row.join(','));
     }
 
+    // MEMO: Androidしか動作しない
     final csvString = buffer.toString();
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/$fileName');
+    final directory = await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_DOWNLOADS);
+    final file = File('$directory/$fileName');
     await file.writeAsString(csvString);
   }
 }

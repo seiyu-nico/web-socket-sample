@@ -29,6 +29,18 @@ class HomeScreen extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () async {
+                PermissionStatus status = await Permission.storage.status;
+
+                logger.i(status.isDenied);
+                if (status.isDenied) {
+                  // ユーザーが以前に拒否した場合や、まだ許可を要求していない場合
+                  status = await Permission.storage.request();
+                }
+
+                if (status.isDenied) {
+                  return;
+                }
+
                 final csvRepository = ref.read(csvRepositoryProvider);
                 final overlay = Overlay.of(context);
                 final overlayEntry = OverlayEntry(builder: (context) {
