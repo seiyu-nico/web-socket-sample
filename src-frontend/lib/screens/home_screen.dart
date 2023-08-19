@@ -1,8 +1,10 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // Project imports:
 import 'package:websocket_sample/components/overlay/progress.dart';
@@ -28,17 +30,16 @@ class HomeScreen extends ConsumerWidget {
             ElevatedButton(
               onPressed: () async {
                 final csvRepository = ref.read(csvRepositoryProvider);
-                final response = await csvRepository.download();
-
-                logger.i(response);
-
                 final overlay = Overlay.of(context);
                 final overlayEntry = OverlayEntry(builder: (context) {
                   final progress = ref.watch(progressProvider);
                   return Progress(progress: progress);
                 });
+                logger.i("オーバーレイ表示");
                 overlay.insert(overlayEntry);
                 ref.read(overlayEntryProvider.notifier).state = overlayEntry;
+
+                final response = await csvRepository.download();
               },
               child: const Text('CSVダウンロード'),
             ),

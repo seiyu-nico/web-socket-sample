@@ -3,20 +3,17 @@ import 'dart:io';
 
 // Package imports:
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:websocket_sample/entities/csv.dart';
+import 'package:websocket_sample/helper/files/downloader.dart';
 
-// TODO: 動作未確認
-class AppDownloader {
+class AppDownloader implements Downloader {
   const AppDownloader();
 
-  Future<void> download(String fileName, List<List<String>> data) async {
-    if (await Permission.storage.request().isGranted) {
-      // ストレージへのアクセス許可が得られた場合の処理
-    }
-
+  @override
+  Future<void> download(String fileName, Csv data) async {
     final buffer = StringBuffer();
 
-    for (final row in data) {
+    for (final row in data.toList()) {
       buffer.writeln(row.join(','));
     }
 
@@ -26,3 +23,5 @@ class AppDownloader {
     await file.writeAsString(csvString);
   }
 }
+
+Downloader getDownloader() => const AppDownloader();
