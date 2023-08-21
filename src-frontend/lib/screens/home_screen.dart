@@ -30,8 +30,6 @@ class HomeScreen extends ConsumerWidget {
             ElevatedButton(
               onPressed: () async {
                 PermissionStatus status = await Permission.storage.status;
-
-                logger.i(status.isDenied);
                 if (status.isDenied) {
                   // ユーザーが以前に拒否した場合や、まだ許可を要求していない場合
                   status = await Permission.storage.request();
