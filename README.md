@@ -1,6 +1,10 @@
 # WebSocketサンプルリポジトリ
 
-# エミュレータで実行する場合
+## 初期設定
+- Flutter上にはURLがべた書きされているので適宜変更する
+  - src-frontend/lib/config/url_config.dart
+
+## エミュレータで実行する場合
 - ローカルにDNSサーバを起動してエミュレータのDNSの向き先をそちらに向ける
 ## Mac
 emulator -avd <エミュレータのID> -dns-server <macのIPv4アドレス>
