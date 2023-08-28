@@ -29,14 +29,17 @@ class HomeScreen extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () async {
-                PermissionStatus status = await Permission.storage.status;
-                if (status.isDenied) {
-                  // ユーザーが以前に拒否した場合や、まだ許可を要求していない場合
-                  status = await Permission.storage.request();
-                }
+                // Webかどうかでここの処理を分ける
+                if (!kIsWeb) {
+                  PermissionStatus status = await Permission.storage.status;
+                  if (status.isDenied) {
+                    // ユーザーが以前に拒否した場合や、まだ許可を要求していない場合
+                    status = await Permission.storage.request();
+                  }
 
-                if (status.isDenied) {
-                  return;
+                  if (status.isDenied) {
+                    return;
+                  }
                 }
 
                 final csvRepository = ref.read(csvRepositoryProvider);
